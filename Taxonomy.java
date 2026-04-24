@@ -10,45 +10,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// Taxonomy
-// - This class represents a taxonomy of items in the hierarchical dataset.
-// - Coded by: Trinh D.D. Nguyen
-// - Version 1.0
-// - Date: 2025-05-18
-
 public class Taxonomy {
 
 	class Tuple {
 		final int parent;
 		final int child;
-		
+
 		public Tuple(int p, int c) {
 			parent = p;
 			child = c;
 		}
 	}
-	
+
 	final List<Tuple> taxonomy;
 	final Set<Integer> parents;
 	final Map<Integer, Integer> childToParent;
 
-	public Taxonomy() { 		
+	public Taxonomy() {
 		this.childToParent = new HashMap<>();
 		this.taxonomy = new ArrayList<>();
 		this.parents = new HashSet<>();
 	}
 
-	public Taxonomy(String filename, Dataset dataset) throws IOException { 
+	public Taxonomy(String filename, Dataset dataset) throws IOException {
 		this();
 		load(filename, dataset);
 	}
-	
+
 	public void add(int p, int c) {
 		taxonomy.add(new Tuple(p, c));
 		parents.add(p);
-		childToParent.put(c,p);	
+		childToParent.put(c,p);
 	}
-	
+
 	public void load(String filename, Dataset dataset) throws IOException {
 		BufferedReader	reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filename))));
 		String line;
@@ -58,7 +52,7 @@ public class Taxonomy {
 				if (line.isEmpty() == true) continue;
 				char c = line.charAt(0);
 				if (c == '#' || c == '%' || c == '@')  continue;
-											
+
 				String	tokens[] = line.split(",");
 				Integer	child = Integer.parseInt(tokens[0]);
 				Integer	parent = Integer.parseInt(tokens[1]);
@@ -67,14 +61,14 @@ public class Taxonomy {
 				add(parent, child);
 			}
 		}
-		catch (Exception e) { 
+		catch (Exception e) {
 			System.err.println("Error in loading taxonomy file: " + filename);
 		}
 		finally {
-			if (reader != null) reader.close(); 
+			if (reader != null) reader.close();
 		}
 	}
-	
+
 	public void load(String filename) throws IOException {
 		BufferedReader	reader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filename))));
 		String line;
@@ -84,18 +78,18 @@ public class Taxonomy {
 				if (line.isEmpty() == true) continue;
 				char c = line.charAt(0);
 				if (c == '#' || c == '%' || c == '@')  continue;
-											
+
 				String	tokens[] = line.split(",");
 				Integer	child = Integer.parseInt(tokens[0]);
 				Integer	parent = Integer.parseInt(tokens[1]);
 				add(parent, child);
 			}
 		}
-		catch (Exception e) { 
+		catch (Exception e) {
 			System.err.println("Error in loading taxonomy file: " + filename);
 		}
 		finally {
-			if (reader != null) reader.close(); 
+			if (reader != null) reader.close();
 		}
 	}
 
@@ -106,3 +100,4 @@ public class Taxonomy {
 	public int size() { return taxonomy.size(); }
 	public int parentCount() { return parents.size(); }
 }
+
